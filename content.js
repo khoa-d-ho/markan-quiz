@@ -88,7 +88,7 @@ const QUESTIONS = [
     {
       number: 1,
       titleLabel: 'The Disruptive Secret',
-      text: 'You discover a respected leader is secretly breaking the law to funnel resources to the unhoused. Revealing it will cause a massive scandal; hiding it feels like a burden. What is your instinct?',
+      text: 'You discovered a respected leader illegally helping the homeless. Exposing them causes a scandal; hiding it burdens you. Your choice?',
       options: [
         { archetype: 'scribe',    text: 'Report it. Rules exist for a reason; rogue charity is dangerous.' },
         { archetype: 'demoniac',  text: 'Shout it everywhere! The broken system needs this disruption.' },
