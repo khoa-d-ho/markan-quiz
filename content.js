@@ -85,69 +85,65 @@ const ARCHETYPES = {
 // NOTE: Question 5 is the tie-breaker. Keep it last in the array.
 
 const QUESTIONS = [
-  {
-    number: 1,
-    titleLabel: 'The Disruptive Secret',
-    text: 'You discover a respected leader is secretly breaking the law to funnel resources to the unhoused. Revealing it will cause a massive scandal; hiding it feels like a burden. What is your instinct?',
-    options: [
-      { archetype: 'scribe',    text: 'Document the facts and report it. Rules exist for a reason, and rogue charity is dangerous.' },
-      { archetype: 'demoniac',  text: 'Shout it everywhere. The system is broken and needs this kind of disruption!' },
-      { archetype: 'faithful',  text: 'Step in and help them immediately, completely ignoring the legal risks to yourself.' },
-      { archetype: 'disciple',  text: 'Keep it quiet. You want to stay in their inner circle, but keep an exit strategy just in case.' },
-      { archetype: 'centurion', text: "Watch silently. True integrity doesn't need good PR; it proves itself in the dark." },
-    ],
-  },
-
-  {
-    number: 2,
-    titleLabel: 'The Uncredentialed Voice',
-    text: 'A speaker with a rough background and zero formal credentials starts explaining complex truths better than any educated expert. How do you view them?',
-    options: [
-      { archetype: 'scribe',    text: 'Reject them immediately. Without the proper degrees and vetting, they cannot be trusted.' },
-      { archetype: 'faithful',  text: 'Listen eagerly to the truth of their words, entirely ignoring their lack of status.' },
-      { archetype: 'disciple',  text: 'Nod along publicly, but secretly worry about what others will think if you associate with them.' },
-      { archetype: 'demoniac',  text: 'Become their loudest fan simply because they make the established experts look foolish.' },
-      { archetype: 'centurion', text: 'Recognize the raw, undeniable authority in their voice that titles can never buy.' },
-    ],
-  },
-
-  {
-    number: 3,
-    titleLabel: 'The Tradition Trap',
-    text: 'Someone urgently needs your help, but helping them right now would break a sacred tradition or strict rule of your community. What do you do?',
-    options: [
-      { archetype: 'disciple',  text: 'Quietly ask a leader what to do, afraid of making the wrong choice and looking bad.' },
-      { archetype: 'scribe',    text: 'Insist they wait. Traditions hold the community together, and breaking them invites chaos.' },
-      { archetype: 'centurion', text: 'Note the hypocrisy of the rule and help the person simply because it is the practical thing to do.' },
-      { archetype: 'faithful',  text: 'Immediately cross the boundary and help the person, completely disregarding the "rules."' },
-      { archetype: 'demoniac',  text: 'Loudly mock the tradition and help them, daring anyone in charge to stop you.' },
-    ],
-  },
-
-  {
-    number: 4,
-    titleLabel: 'The Unclean / The Outcast',
-    text: 'At a pristine, elite gala, a disheveled, erratic person starts shouting uncomfortable truths. The guests are horrified. How do you react?',
-    options: [
-      { archetype: 'disciple',  text: 'Slip out the back door. You hate the embarrassment and want to avoid the drama.' },
-      { archetype: 'scribe',    text: 'Demand security remove them. They lack credentials and are contaminating the event.' },
-      { archetype: 'faithful',  text: 'Approach directly and offer them a drink, completely ignoring the social taboo.' },
-      { archetype: 'demoniac',  text: 'Feel a surge of kinship and go sit right next to them in the chaos.' },
-      { archetype: 'centurion', text: 'Watch objectively, realizing the "polite" guests are actually terrified of the truth.' },
-    ],
-  },
-
-  // ── Question 5 is the TIE-BREAKER — keep it last ──────────────────────────
-  {
-    number: 5,
-    titleLabel: 'The Ultimate Unveiling',
-    text: 'Your visionary mentor is publicly humiliated, stripped of all power, and completely vulnerable. What is your final response?',
-    options: [
-      { archetype: 'demoniac',  text: 'Mourn loudly from the margins, feeling the madness and cruelty of the world.' },
-      { archetype: 'disciple',  text: 'Delete all association with them and disappear into the crowd.' },
-      { archetype: 'centurion', text: 'Look at their broken state and realize: This is what true greatness actually looks like.' },
-      { archetype: 'faithful',  text: 'Refuse to leave their side, standing vigil as a witness in their darkest moment.' },
-      { archetype: 'scribe',    text: 'Nod in agreement. The system worked perfectly by exposing a dangerous fraud.' },
-    ],
-  },
-];
+    {
+      number: 1,
+      titleLabel: 'The Disruptive Secret',
+      text: 'You discover a respected leader is secretly breaking the law to funnel resources to the unhoused. Revealing it will cause a massive scandal; hiding it feels like a burden. What is your instinct?',
+      options: [
+        { archetype: 'scribe',    text: 'Report it. Rules exist for a reason; rogue charity is dangerous.' },
+        { archetype: 'demoniac',  text: 'Shout it everywhere! The broken system needs this disruption.' },
+        { archetype: 'faithful',  text: 'Help immediately, completely ignoring the legal risks to yourself.' },
+        { archetype: 'disciple',  text: 'Keep it quiet to stay in the inner circle, but plan an exit.' },
+        { archetype: 'centurion', text: 'Watch silently. True integrity proves itself in the dark.' },
+      ],
+    },
+    {
+      number: 2,
+      titleLabel: 'The Uncredentialed Voice',
+      text: 'A speaker with a rough background and zero formal credentials starts explaining complex truths better than any educated expert. How do you view them?',
+      options: [
+        { archetype: 'scribe',    text: 'Reject them. Without proper degrees, they cannot be trusted.' },
+        { archetype: 'faithful',  text: 'Listen eagerly to their truth, ignoring their lack of status.' },
+        { archetype: 'disciple',  text: 'Nod along, but secretly worry about what others will think.' },
+        { archetype: 'demoniac',  text: 'Cheer loudly because they make the established experts look foolish.' },
+        { archetype: 'centurion', text: 'Recognize the raw, undeniable authority that titles can never buy.' },
+      ],
+    },
+    {
+      number: 3,
+      titleLabel: 'The Tradition Trap',
+      text: 'Someone urgently needs your help, but helping them right now would break a sacred tradition or strict rule of your community. What do you do?',
+      options: [
+        { archetype: 'disciple',  text: 'Quietly ask a leader, afraid of making the wrong choice.' },
+        { archetype: 'scribe',    text: 'Insist they wait. Breaking community traditions invites chaos.' },
+        { archetype: 'centurion', text: "Note the rule's hypocrisy and help because it is practical." },
+        { archetype: 'faithful',  text: 'Immediately cross the boundary and help, completely disregarding the rules.' },
+        { archetype: 'demoniac',  text: 'Loudly mock the tradition and help, daring anyone to stop you.' },
+      ],
+    },
+    {
+      number: 4,
+      titleLabel: 'The Unclean / The Outcast',
+      text: 'At a pristine, elite gala, a disheveled, erratic person starts shouting uncomfortable truths. The guests are horrified. How do you react?',
+      options: [
+        { archetype: 'disciple',  text: 'Slip out the back door to avoid the embarrassment and drama.' },
+        { archetype: 'scribe',    text: 'Demand security remove them for contaminating the event.' },
+        { archetype: 'faithful',  text: 'Approach directly and offer them a drink, ignoring the social taboo.' },
+        { archetype: 'demoniac',  text: 'Feel a surge of kinship and sit right next to them.' },
+        { archetype: 'centurion', text: 'Watch objectively; the "polite" guests are terrified of the truth.' },
+      ],
+    },
+    // ── Question 5 is the TIE-BREAKER — keep it last ──────────────────────────
+    {
+      number: 5,
+      titleLabel: 'The Ultimate Unveiling',
+      text: 'Your visionary mentor is publicly humiliated, stripped of all power, and completely vulnerable. What is your final response?',
+      options: [
+        { archetype: 'demoniac',  text: "Mourn loudly from the margins, feeling the world's cruelty." },
+        { archetype: 'disciple',  text: 'Delete all association and quickly disappear into the crowd.' },
+        { archetype: 'centurion', text: 'Look at their broken state and realize: This is true greatness.' },
+        { archetype: 'faithful',  text: 'Refuse to leave, standing vigil in their darkest moment.' },
+        { archetype: 'scribe',    text: 'Nod in agreement. The system perfectly exposed a dangerous fraud.' },
+      ],
+    },
+  ];
