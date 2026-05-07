@@ -28,6 +28,7 @@
     html, body {
       font-size: 16px;
       height: 100%;
+      height: -webkit-fill-available; /* Add this for Safari */
       margin: 0;
       padding: 0;
       overflow: hidden;
@@ -37,11 +38,12 @@
       font-family: 'Inter', sans-serif;
     }
 
-    /* Viewport-lock wrapper — position:fixed+overflow on iOS Safari is buggy;
-       absolute children of a fixed parent scroll correctly. */
     #app {
       position: fixed;
       inset: 0;
+      height: 100vh; /* Fallback */
+      height: 100dvh; /* Modern mobile fix */
+      height: -webkit-fill-available; /* Add this for Safari */
       overflow: hidden;
     }
 
@@ -68,7 +70,6 @@
       padding: 1.5rem;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      overscroll-behavior: none;
       opacity: 0;
       pointer-events: none;
       transition: opacity var(--transition);
@@ -89,7 +90,7 @@
       padding: 3rem 3.5rem;
       position: relative;
       overflow: hidden;
-      margin: auto;
+      margin: 0 auto;
     }
 
     .card::before {
