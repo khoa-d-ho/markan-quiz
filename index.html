@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Markan Trial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0f0f11;
+      --surface:   #17171c;
+      --border:    #2a2a35;
+      --muted:     #3a3a48;
+      --text:      #e8e6df;
+      --text-dim:  #9996a0;
+      --accent:    #b8292a;
+      --accent-lt: #d4403f;
+      --gold:      #c9a84c;
+      --gold-lt:   #e0c068;
+      --radius:    12px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow-x: hidden;
+    }
+
+    /* Subtle background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(184,41,42,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(201,168,76,0.05) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Screens ─────────────────────────────────── */
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+      z-index: 1;
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ─── Card ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-width: 680px;
+      width: 100%;
+      padding: 3rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+    }
+
+    /* ─── Landing ──────────────────────────────────── */
+    .landing-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .landing-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .landing-title em {
+      font-style: italic;
+      color: var(--accent-lt);
+    }
+
+    .landing-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 1.75rem;
+    }
+
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin-bottom: 1.75rem;
+    }
+
+    .landing-body {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--text-dim);
+      margin-bottom: 2.5rem;
+    }
+
+    .landing-body strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ─── Buttons ──────────────────────────────────── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 6px;
+      padding: 0.9rem 2rem;
+      cursor: pointer;
+      transition: background var(--transition), transform 0.15s ease, box-shadow var(--transition);
+      box-shadow: 0 4px 24px rgba(184,41,42,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--accent-lt);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(184,41,42,0.45);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--text-dim);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition), background var(--transition);
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,0.06);
+    }
+
+    /* ─── Quiz Screen ──────────────────────────────── */
+    .quiz-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .quiz-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .progress-track {
+      flex: 1;
+      margin: 0 1rem;
+      height: 2px;
+      background: var(--muted);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .quiz-counter {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    /* Question block – fades in/out */
+    .question-block {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .question-block.fade-out {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    .question-block.fade-in {
+      animation: fadeInUp 0.35s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .question-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--accent-lt);
+      margin-bottom: 1.75rem;
+    }
+
+    /* ─── Answer Options ───────────────────────────── */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .option-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(184,41,42,0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .option-btn:hover {
+      border-color: var(--accent);
+      background: rgba(184,41,42,0.05);
+      transform: translateX(3px);
+    }
+    .option-btn:hover::before { opacity: 1; }
+
+    .option-btn:active { transform: translateX(1px); }
+
+    .option-marker {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--muted);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      margin-top: 1px;
+    }
+    .option-btn:hover .option-marker {
+      border-color: var(--accent);
+      color: var(--accent-lt);
+      background: rgba(184,41,42,0.15);
+    }
+
+    .option-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .option-btn:hover .option-text { color: var(--text); }
+
+    /* ─── Result Screen ────────────────────────────── */
+    .result-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-lt);
+      margin-bottom: 0.6rem;
+    }
+
+    .result-archetype {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+
+    .result-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .result-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), var(--gold), transparent);
+      margin-bottom: 1.5rem;
+    }
+
+    .result-desc {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+    }
+
+    .result-desc strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Score breakdown */
+    .score-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .score-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.55rem 0.75rem;
+    }
+
+    .score-item.winner {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.07);
+    }
+
+    .score-name {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .score-item.winner .score-name { color: var(--gold-lt); }
+
+    .score-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      min-width: 1.2rem;
+      text-align: right;
+    }
+
+    .score-item.winner .score-val { color: var(--gold); }
+
+    .result-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Ornament ─────────────────────────────────── */
+    .ornament {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      letter-spacing: 0.5rem;
+      margin: 2rem 0 1.5rem;
+      user-select: none;
+    }
+
+    /* ─── Responsive ───────────────────────────────── */
+    @media (max-width: 560px) {
+      .card { padding: 2rem 1.5rem; }
+      .score-grid { grid-template-columns: 1fr; }
+      .result-actions { flex-direction: column; }
+      .result-actions .btn-primary,
+      .result-actions .btn-ghost { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ SCREEN 1: LANDING ══════════════ -->
+<div class="screen active" id="screen-landing">
+  <div class="card">
+    <p class="landing-eyebrow" id="landing-eyebrow"></p>
+    <h1 class="landing-title" id="landing-title"></h1>
+    <p class="landing-subtitle" id="landing-subtitle"></p>
+    <div class="divider"></div>
+    <p class="landing-body" id="landing-body"></p>
+    <button class="btn-primary" onclick="startQuiz()" id="landing-begin">
+      <!-- text injected by JS -->
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9 4 13 8 9 12"/></svg>
+    </button>
+    <div class="ornament">· · ·</div>
+    <p id="landing-footnote" style="font-size:0.7rem;color:var(--muted);letter-spacing:0.05em;"></p>
+  </div>
+</div>
+
+<!-- ══════════════ SCREEN 2: QUIZ ══════════════════ -->
+<div class="screen" id="screen-quiz">
+  <div class="card">
+    <div class="quiz-meta">
+      <span class="quiz-label">Trial</span>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <span class="quiz-counter" id="quiz-counter">1 / 5</span>
+    </div>
+    <div class="question-block" id="question-block">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SCREEN 3: RESULT ════════════════ -->
+<div class="screen" id="screen-result">
+  <div class="card">
+    <p class="result-eyebrow" id="result-eyebrow">Your Archetype</p>
+    <h2 class="result-archetype" id="result-archetype"></h2>
+    <p class="result-title" id="result-title"></p>
+    <div class="result-divider"></div>
+    <p class="result-desc" id="result-desc"></p>
+    <div class="score-grid" id="score-grid"></div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="retake()">
+        Retake Trial
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-8.51L1 10"/></svg>
+      </button>
+      <button class="btn-ghost" onclick="shareResult()">
+        Share Result
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="3" r="2"/><circle cx="3" cy="8" r="2"/><circle cx="13" cy="13" r="2"/><line x1="4.93" y1="9.09" x2="11.07" y2="11.91"/><line x1="11.07" y1="4.09" x2="4.93" y2="6.91"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="content.js"></script>
+<script>
+  // ─── Populate landing page from LANDING (defined in content.js) ──────────
+
+  function initLanding() {
+    document.getElementById('landing-eyebrow').textContent  = LANDING.eyebrow;
+    document.getElementById('landing-title').innerHTML      = LANDING.title;
+    document.getElementById('landing-subtitle').textContent = LANDING.subtitle;
+    document.getElementById('landing-body').innerHTML       = LANDING.body;
+    document.getElementById('landing-footnote').textContent = LANDING.footnote;
+
+    // Prepend button label text before the existing SVG arrow
+    const btn = document.getElementById('landing-begin');
+    btn.insertAdjacentText('afterbegin', LANDING.beginButton + ' ');
+  }
+
+  // ─── State ───────────────────────────────────────────────────────────────
+
+  initLanding();
+
+  let currentQ = 0;
+  let scores = {};
+  let q5Choice = null;
+  let transitioning = false;
+
+  function resetScores() {
+    scores = {};
+    Object.keys(ARCHETYPES).forEach(k => { scores[k] = 0; });
+  }
+
+  // ─── Helpers ─────────────────────────────────────────────────────────────
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // ─── Quiz Logic ──────────────────────────────────────────────────────────
+
+  function startQuiz() {
+    currentQ = 0;
+    resetScores();
+    q5Choice = null;
+    transitioning = false;
+    renderQuestion();
+    showScreen('screen-quiz');
+  }
+
+  function renderQuestion(animate = false) {
+    const q = QUESTIONS[currentQ];
+    const block = document.getElementById('question-block');
+    const shuffledOpts = shuffle(q.options);
+    const letters = ['A', 'B', 'C', 'D', 'E'];
+
+    const optionsHTML = shuffledOpts.map((opt, i) => `
+      <button class="option-btn" onclick="selectAnswer('${opt.archetype}', ${currentQ === 4})">
+        <span class="option-marker">${letters[i]}</span>
+        <span class="option-text">${opt.text}</span>
+      </button>
+    `).join('');
+
+    block.innerHTML = `
+      <p class="question-title">Q${q.number} · ${q.titleLabel}</p>
+      <p class="question-text">${q.text}</p>
+      <p style="height:1.5rem"></p>
+      <div class="options">${optionsHTML}</div>
+    `;
+
+    if (animate) {
+      block.classList.remove('fade-in');
+      void block.offsetWidth;
+      block.classList.add('fade-in');
+    }
+
+    // Progress
+    const pct = (currentQ / QUESTIONS.length) * 100;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('quiz-counter').textContent = `${currentQ + 1} / ${QUESTIONS.length}`;
+  }
+
+  function selectAnswer(archetype, isTieBreaker) {
+    if (transitioning) return;
+    transitioning = true;
+
+    scores[archetype]++;
+    if (isTieBreaker) q5Choice = archetype;
+
+    const block = document.getElementById('question-block');
+
+    // Disable all buttons immediately
+    block.querySelectorAll('.option-btn').forEach(b => {
+      b.style.pointerEvents = 'none';
+    });
+
+    block.classList.add('fade-out');
+
+    setTimeout(() => {
+      block.classList.remove('fade-out');
+      currentQ++;
+
+      if (currentQ >= QUESTIONS.length) {
+        showResult();
+      } else {
+        renderQuestion(true);
+        transitioning = false;
+      }
+    }, 310);
+  }
+
+  // ─── Result Logic ─────────────────────────────────────────────────────────
+
+  function computeWinner() {
+    const max = Math.max(...Object.values(scores));
+    const tied = Object.keys(scores).filter(k => scores[k] === max);
+
+    if (tied.length === 1) return tied[0];
+
+    // Tie-breaker: Q5 choice
+    if (q5Choice && tied.includes(q5Choice)) return q5Choice;
+
+    // Fallback: just pick the first tied (shouldn't normally happen)
+    return tied[0];
+  }
+
+  function showResult() {
+    const winner = computeWinner();
+    const data = ARCHETYPES[winner];
+
+    document.getElementById('result-archetype').textContent = data.name;
+    document.getElementById('result-title').textContent = data.title;
+    document.getElementById('result-desc').innerHTML = data.desc;
+
+    // Score breakdown — labels pulled from ARCHETYPES.name in content.js
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const scoreHTML = sorted.map(([key, val]) => `
+      <div class="score-item ${key === winner ? 'winner' : ''}">
+        <span class="score-name">${ARCHETYPES[key].name}</span>
+        <span class="score-val">${val}</span>
+      </div>
+    `).join('');
+
+    document.getElementById('score-grid').innerHTML = scoreHTML;
+
+    // Update progress to 100%
+    document.getElementById('progress-fill').style.width = '100%';
+
+    showScreen('screen-result');
+  }
+
+  function retake() {
+    showScreen('screen-landing');
+  }
+
+  function shareResult() {
+    const winner = document.getElementById('result-archetype').textContent;
+    const subtitle = document.getElementById('result-title').textContent;
+    const text = `I took The Markan Trial and I am "${winner} – ${subtitle}". Which Gospel archetype are you?`;
+
+    if (navigator.share) {
+      navigator.share({ title: 'The Markan Trial', text }).catch(() => {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.result-actions .btn-ghost');
+        const orig = btn.innerHTML;
+        btn.innerHTML = 'Copied! <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+  }
+</script>
+</body>
+</html>
